@@ -1,13 +1,12 @@
-DK Global Tech - Time Tracker System
 
-Setup Instructions:
-1. This system is designed for multi-company use.
-2. Default company: Precious Hands (red theme).
-3. To switch to another company (e.g. Nila May), update COMPANY_NAME in config.js and replace logo.
-4. Contact support: dkglobaltech@gmail.com
+DK Time Tracker (Backend-Enabled Flask App)
+===========================================
 
-Security:
-- License required to activate system.
-- Contact DK Global Tech for payment and access.
+This version includes a working login form, Flask backend, and dynamic dashboard.
 
-Developed by: Doseyian (Kelvin Sekeyian)
+Run locally:
+1. pip install -r requirements.txt
+2. python app.py
+3. Visit http://localhost:5000
+
+Developed by DK Global Tech | dkglobaltech@gmail.com
