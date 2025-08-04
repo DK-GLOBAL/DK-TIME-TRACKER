@@ -1,0 +1,53 @@
+from flask import render_template, session, redirect
+from datetime import datetime
+
+def calculate_working_hours(clock_in, clock_out):
+    try:
+        if not clock_out or "Still Working" in str(clock_out):
+            return "0:00"
+        fmt = "%I:%M:%S %p"  # Adjust format if you store time differently
+        in_time = datetime.strptime(clock_in, fmt)
+        out_time = datetime.strptime(clock_out, fmt)
+        duration = out_time - in_time
+        return str(duration)
+    except Exception as e:
+        print("Error calculating hours:", e)
+        return "0:00"
+
+@app.route('/dashboard')
+def dashboard():
+    try:
+        user = session.get('user')
+        if not user:
+            return redirect('/login')
+
+        # Example: Replace with your DB query
+        attendance_raw = get_today_attendance_data()  # <-- your function
+
+        # Clean/process the data
+        attendance = []
+        for row in attendance_raw:
+            clock_in = row.get('clock_in')
+            clock_out = row.get('clock_out')
+            working_hours = calculate_working_hours(clock_in, clock_out)
+
+            attendance.append({
+                'name': row.get('name', 'Unknown'),
+                'job_title': row.get('job_title', 'N/A'),
+                'clock_in': clock_in or "N/A",
+                'clock_out': clock_out or "Still Working",
+                'working_hours': working_hours,
+                'status': row.get('status', 'Unknown'),
+                'early_late': row.get('early_late', 'N/A')
+            })
+
+        return render_template(
+            'dashboard.html',
+            user=user,
+            attendance=attendance
+        )
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return "Internal Server Error: " + str(e), 500
